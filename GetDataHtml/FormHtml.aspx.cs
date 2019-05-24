@@ -19,41 +19,48 @@ namespace GetDataHtml
 
         protected void send_Click(object sender, EventArgs e)
         {
-            string to = string.Empty, subject = string.Empty, cc = string.Empty;
-            XmlDocument xmlDoc = new XmlDocument();
+            string to = string.Empty, 
+                    subject = string.Empty, 
+                    cc = string.Empty, 
+                    from = string.Empty;
+
+            var xmlDoc = new XmlDocument();
             xmlDoc.Load(Server.MapPath("~/MailList.xml"));
             XmlNodeList nodeList = xmlDoc.DocumentElement.SelectNodes("/Emails/email");
 
             foreach(XmlNode xmlNode in nodeList)
             {
+                from = xmlNode.SelectSingleNode("from").InnerText;
                 to = xmlNode.SelectSingleNode("to").InnerText;
                 cc = xmlNode.SelectSingleNode("cc").InnerText;
                 subject = xmlNode.SelectSingleNode("subject").InnerText;
             }
 
-            SendEmail(to, "vicctor.cordova@gmail.com", subject, "TESSSST", cc);                    
-        }
+            string body = "";
+            var mailNew = new MailMessage(from, to, subject, body);
 
-        protected void SendEmail(string to, string from,string subject, string body, string cc)
-        {            
-            string[] toCopies = to.Split(';');
-            MailMessage mailNew = new MailMessage();
-            mailNew.From = new MailAddress(from);
-
+            string[] toCopies = cc.Split(',');
             foreach (string toCopy in toCopies)
             {
-                mailNew.To.Add(new MailAddress(toCopy));
+                mailNew.CC.Add(new MailAddress(toCopy));
             }
 
-            mailNew.Bcc.Add(cc);
             mailNew.Subject = subject;
             mailNew.Body = body;
             mailNew.IsBodyHtml = true;
-            mailNew.Priority = MailPriority.Normal;
+            mailNew.Priority = MailPriority.High;
 
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.EnableSsl = true;
-            smtpClient.Credentials = new NetworkCredential("theslapboy@gmail.com", "ateosolraiar");
+            var ss = new SmtpClient
+            {
+                Host = "smtpout.secureserver.net",
+                Port = 3535, // https://mx.godaddy.com/help/what-do-i-do-if-i-have-trouble-connecting-to-my-email-account-319
+                Timeout = 10000,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential("no-reply@securepaycc.com", "123456")
+            };
+
+            ss.Send(mailNew);
         }
     }
 }

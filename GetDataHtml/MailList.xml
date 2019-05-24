@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Emails>
+  <email>
+    <to>theslapboy@gmail.com</to>
+    <subject>TEST EMAIL SUCCESSFULLY</subject>
+    <cc>vicctor.cordova@gmail.com</cc>
+    <cc>victorc@bajadev.com</cc>
+    <cc>carlosr@bajadev.com</cc>
+  </email>
+</Emails>

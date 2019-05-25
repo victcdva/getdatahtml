@@ -19,10 +19,7 @@ namespace GetDataHtml
 
         protected void send_Click(object sender, EventArgs e)
         {
-            string to = string.Empty, 
-                    subject = string.Empty, 
-                    cc = string.Empty, 
-                    from = string.Empty;
+            string to = string.Empty, subject = string.Empty, cc = string.Empty, from = string.Empty;
 
             var xmlDoc = new XmlDocument();
             xmlDoc.Load(Server.MapPath("~/MailList.xml"));
